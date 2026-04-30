@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: url-shortener
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=1h
+app:
+  config:
+    baseUrl: "url-short.com"
+    expirationSeconds: 3600
+
+  datasource:
+    url: {$DB.URL : jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1}
+    driverClassName: {$DB.DRIVER : org.h2.Driver}
+    username: {$DB.USER: sa}
+    #En contextos reales, es una buena practica que algunos de estos datos lleguen cifrados, y se descifren en tiempo de despliegue
+    password: {$DB.PASS: ""}
+  sql:
+    init:
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: {$JPA.DIALECT: org.hibernate.dialect.H2Dialect}
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+server:
+  servlet:
+    context-path: /api/v1/url-shortener
