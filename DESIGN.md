@@ -52,6 +52,8 @@ El proyecto sigue una **Arquitectura Hexagonal (Puertos y Adaptadores)**, lo que
 ## Trade-offs
 -   **H2 vs Base de Datos Persistente:** Se priorizó la rapidez de ejecución local sobre la persistencia de datos a largo plazo. En un entorno productivo, se cambiaría H2 por una base de datos como PostgreSQL o MySQL mediante la configuración del puerto de persistencia.
 -   **Sincronismo:** El proceso de creación y resolución es síncrono. Para una escala masiva, se podría considerar una resolución reactiva o el uso de Redis para una caché distribuida.
+-   **Rate Limiting :** La solucion propuesta esta basada en las librerias de bucket4j, la cual es muy performante y tiene una gran cantidad de configuraciones. Aun asi, en un entorno real, lo ideal es que la solucion sea a nivel Gateway, para que se pueda aplicar en todas las aplicaciones.
+-   **Analitica :** Para el metodo de analitica, decidi no hacer una FK entre la tabla de analitica y la de url, ya que, con esta solucion, la informacion de url se guarda en memoria tambien, y podria generar un problema de escalabilidad.
 
 ---
 

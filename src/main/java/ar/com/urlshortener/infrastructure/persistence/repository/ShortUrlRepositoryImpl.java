@@ -2,18 +2,18 @@ package ar.com.urlshortener.infrastructure.persistence.repository;
 
 import ar.com.urlshortener.domain.model.ShortUrl;
 import ar.com.urlshortener.domain.model.vo.ShortCode;
-import ar.com.urlshortener.domain.port.ShortUrlRespository;
+import ar.com.urlshortener.domain.port.ShortUrlRepository;
 import ar.com.urlshortener.infrastructure.persistence.mapper.ShortUrlMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
-public class ShortUrlRepositoryImpl implements ShortUrlRespository {
+public class ShortUrlRepositoryImpl implements ShortUrlRepository {
 
     private final ShortUrlCRUDRepository shortUrlCRUDRepository;
 
@@ -25,6 +25,7 @@ public class ShortUrlRepositoryImpl implements ShortUrlRespository {
     }
 
     @Override
+    @CacheEvict(value = "shortUrls", key = "#shortUrl.shortCode.value")
     public ShortUrl save(ShortUrl shortUrl) {
 
         var saved = this.shortUrlCRUDRepository

@@ -1,31 +1,28 @@
 package ar.com.urlshortener.infrastructure.persistence.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.List;
 
 @Entity
-@Table(name = "short_url")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class ShortUrlEntity {
+@Table(name = "url_click")
+public class UrlClickEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
+    @NotBlank
     private String shortCode;
-    private String originalUrl;
-    private long clicks;
-    private Instant createAt;
-    private Instant expiresAt;
-
+    private Instant timestamp;
+    private String userAgent;
+    private String ipAddress;
+    private String referer;
 
 }
