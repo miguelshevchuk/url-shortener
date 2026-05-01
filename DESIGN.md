@@ -114,12 +114,12 @@ El proyecto sigue una **Arquitectura Hexagonal (Puertos y Adaptadores)**, lo que
 3.  **Base de datos H2 (en memoria):** Elegida para simplificar la ejecución inicial y pruebas, evitando la necesidad de configurar una base de datos externa.
 4.  **Caché con Caffeine (Estrategia de Lectura):**
     -   **Qué se cachea:** Se cachea el mapeo entre el `shortCode` y la `originalUrl`.
-    -   **Por qué:** La resolución de URLs es la operación más frecuente en el sistema (99% de las peticiones). Al cachear este resultado, evitamos accesos recurrentes a la base de datos, reducimos la latencia de redirección y mejoramos la capacidad de respuesta bajo carga.
+    -   **Por qué:** La resolución de URLs es la operación más frecuente en el sistema. Al cachear este resultado, evitamos accesos recurrentes a la base de datos, reducimos la latencia de redirección y mejoramos la capacidad de respuesta bajo carga.
 5.  **Rate Limiting con Bucket4j:** Implementación de un filtro de seguridad para prevenir abusos y ataques de denegación de servicio (DoS) limitando solicitudes por IP.
 6.  **MapStruct:** Para el mapeo entre capas (Entidades, DTOs, Modelos REST), manteniendo la separación de preocupaciones y reduciendo código boilerplate.
 7.  **Validación de Dominio:** Se utilizan Value Objects para asegurar que las URLs y los códigos cortos cumplen con las reglas de negocio desde su creación.
 8.  **Documentación con OpenAPI:** Integración de `springdoc-openapi` para generar documentación automática y pruebas interactivas de los endpoints.
-9.  **Estandarización de Errores**: Uso de `ProblemDetail` (RFC 7807) para respuestas de error consistentes y descriptivas.
+9.  **Estandarización de Errores**: Uso de `ProblemDetail`  para respuestas de error consistentes y descriptivas.
 
 ---
 
@@ -136,14 +136,13 @@ El proyecto sigue una **Arquitectura Hexagonal (Puertos y Adaptadores)**, lo que
 ## ESCALABILIDAD FUTURA
 En escenarios de alta carga se proponen las siguientes mejoras:
 - **Caché distribuida (Redis):** Reemplazar Caffeine por Redis para compartir la caché entre múltiples instancias del servicio.
-- **Generación de IDs distribuida (Snowflake):** Implementar un algoritmo tipo Snowflake para garantizar códigos únicos sin colisiones en un entorno distribuido sin depender de bloqueos de DB.
 - **Analytics asincrónico (event streaming):** Desacoplar el registro de clicks usando Kafka o RabbitMQ para que la redirección no se vea penalizada por la escritura en la base de datos de analíticas.
 - **Rate limiting en gateway:** Mover la lógica de limitación de tasa a un API Gateway (como Spring Cloud Gateway o Nginx) para proteger la infraestructura antes de que las peticiones lleguen a la aplicación.
 
 ---
 
 ## Cómo y para qué utilicé la IA
-La IA (Junie) fue utilizada durante el desarrollo para:
+La IA fue utilizada durante el desarrollo para:
 -   **Generación de Estructura:** Definir la estructura de paquetes siguiendo los principios de Clean Architecture / Arquitectura Hexagonal.
 -   **Automatización de Docker:** Creación del `Dockerfile` multietapa optimizado y el archivo `docker-compose.yml`.
 -   **Documentación:** Redacción de este archivo `DESIGN.md`, generación de JavaDocs y anotaciones OpenAPI para mejorar la legibilidad y mantenibilidad.
