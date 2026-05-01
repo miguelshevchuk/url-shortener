@@ -7,11 +7,14 @@ import ar.com.urlshortener.application.query.ResolveShortUrlQuery;
 import ar.com.urlshortener.application.usecase.CreateShortUrlUseCase;
 import ar.com.urlshortener.application.usecase.GetAnalyticsUseCase;
 import ar.com.urlshortener.application.usecase.ResolveShortUrlUseCase;
+import ar.com.urlshortener.infrastructure.filter.RateLimitFilter;
 import ar.com.urlshortener.infrastructure.rest.model.CreateShortUrlRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,7 +28,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ShortUrlRestController.class)
+@WebMvcTest(controllers = ShortUrlRestController.class,
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = RateLimitFilter.class))
 class ShortUrlRestControllerTest {
 
     @Autowired
@@ -50,7 +54,7 @@ class ShortUrlRestControllerTest {
 
         when(createShortUrlUseCase.execute(any(CreateShortUrlCommand.class))).thenReturn(result);
 
-        mockMvc.perform(post("/short-url")
+        mockMvc.perform(post("/url")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -65,7 +69,7 @@ class ShortUrlRestControllerTest {
 
         when(resolveShortUrlUseCase.execute(any(ResolveShortUrlQuery.class))).thenReturn(originalUrl);
 
-        mockMvc.perform(get("/short-url/{shortCode}", shortCode)
+        mockMvc.perform(get("/{shortCode}", shortCode)
                         .header("User-Agent", "Mozilla")
                         .header("Referer", "google.com"))
                 .andExpect(status().isFound())
@@ -79,7 +83,7 @@ class ShortUrlRestControllerTest {
 
         when(getAnalyticsUseCase.execute(any())).thenReturn(result);
 
-        mockMvc.perform(get("/short-url/{shortCode}/analytics", shortCode))
+        mockMvc.perform(get("/url/{shortCode}/analytics", shortCode))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.shortCode").value(shortCode))
                 .andExpect(jsonPath("$.clicks").value(5));
@@ -90,7 +94,7 @@ class ShortUrlRestControllerTest {
         String shortCode = "abc";
         when(resolveShortUrlUseCase.execute(any())).thenReturn("https://example.com");
 
-        mockMvc.perform(get("/short-url/{shortCode}", shortCode)
+        mockMvc.perform(get("/{shortCode}", shortCode)
                         .header("X-Forwarded-For", "1.2.3.4, 5.6.7.8"))
                 .andExpect(status().isFound());
         
@@ -102,7 +106,7 @@ class ShortUrlRestControllerTest {
         String shortCode = "abc";
         when(resolveShortUrlUseCase.execute(any())).thenReturn("https://example.com");
 
-        mockMvc.perform(get("/short-url/{shortCode}", shortCode)
+        mockMvc.perform(get("/{shortCode}", shortCode)
                         .header("X-Real-IP", "9.8.7.6"))
                 .andExpect(status().isFound());
     }

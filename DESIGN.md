@@ -17,7 +17,7 @@ Asegúrate de tener instalado Java 21 y Maven.
 
 1.  **Compilar el proyecto:**
     ```bash
-    ./mvnw clean package
+    mvn clean package
     ```
 2.  **Ejecutar la aplicación:**
     ```bash
@@ -32,7 +32,7 @@ Asegúrate de tener instalado Docker y Docker Compose.
     ```bash
     docker compose up --build
     ```
-    Esto compilará la imagen y levantará el contenedor en el puerto `8080`.
+Esto compilará la imagen y levantará el contenedor en el puerto `8080`.
 
 ---
 
@@ -40,26 +40,26 @@ Asegúrate de tener instalado Docker y Docker Compose.
 
 El proyecto incluye documentación interactiva mediante Swagger UI. Una vez levantada la aplicación, puedes acceder en:
 
-- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
-- **OpenAPI Spec (JSON)**: `http://localhost:8080/v3/api-docs`
+- **Swagger UI**: `http://localhost:8080/api/v1/swagger-ui.html`
+- **OpenAPI Spec (JSON)**: `http://localhost:8080/api/v1/v3/api-docs`
 
 ---
 
 ## Endpoints
 
 ### 1. Crear URL Corta
-- **POST** `/api/v1/url`
+- **POST** `/url`
 - **Cuerpo (JSON)**:
     - `originalUrl`: (Obligatorio) URL que se desea acortar. Debe ser válida.
     - `shortCode`: (Opcional) Código personalizado deseado.
 - **Descripción**: Genera un código único para una URL y establece una fecha de expiración.
 
 ### 2. Redirección
-- **GET** `/api/v1/{shortCode}`
+- **GET** `/{shortCode}`
 - **Descripción**: Redirige (HTTP 302) a la URL original asociada al código corto. Registra estadísticas del click (IP, User-Agent, Referer).
 
 ### 3. Analíticas
-- **GET** `/api/v1/url/{shortCode}/analytics`
+- **GET** `/url/{shortCode}/analytics`
 - **Descripción**: Devuelve información detallada sobre la URL corta, incluyendo contador total de clicks y detalles de los últimos accesos.
 
 ---

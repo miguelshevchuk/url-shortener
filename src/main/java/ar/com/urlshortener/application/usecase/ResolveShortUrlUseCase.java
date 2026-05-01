@@ -62,7 +62,6 @@ public class ResolveShortUrlUseCase {
                 new IpAddress(query.ipAddress()),
                 query.referer()
         );
-        log.info("Datos del click: {}", urlClick);
         urlClickRepository.save(urlClick);
         shortUrl.registerClick();
         shortUrlRespository.save(shortUrl);
