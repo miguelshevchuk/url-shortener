@@ -5,10 +5,6 @@ spring:
     type: caffeine
     caffeine:
       spec: maximumSize=10000,expireAfterWrite=1h
-app:
-  config:
-    baseUrl: "url-short.com"
-    expirationSeconds: 3600
 
   datasource:
     url: {$DB.URL : jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1}
@@ -35,3 +31,8 @@ app:
 server:
   servlet:
     context-path: /api/v1
+
+app:
+  config:
+    baseUrl: "url-short.com"
+    expirationSeconds: 3600
