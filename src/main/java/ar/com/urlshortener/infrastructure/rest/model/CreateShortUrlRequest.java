@@ -6,7 +6,8 @@ import org.hibernate.validator.constraints.URL;
 public record CreateShortUrlRequest(
         @NotBlank
         @URL
-        String originalUrl
+        String originalUrl,
+        String shortCode
 ) {
 
 
