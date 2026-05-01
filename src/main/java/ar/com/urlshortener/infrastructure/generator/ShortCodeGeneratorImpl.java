@@ -7,6 +7,10 @@ import lombok.AllArgsConstructor;
 import java.security.SecureRandom;
 
 
+/**
+ * Implementación del generador de códigos cortos.
+ * Genera una cadena aleatoria de longitud fija utilizando caracteres alfanuméricos.
+ */
 @AllArgsConstructor
 public class ShortCodeGeneratorImpl implements ShortCodeGenerator {
 
@@ -14,6 +18,12 @@ public class ShortCodeGeneratorImpl implements ShortCodeGenerator {
     private static final int CODE_LENGTH = 8;
     private final SecureRandom random = new SecureRandom();
 
+    /**
+     * Genera un nuevo código corto aleatorio.
+     * Nota: No garantiza unicidad por sí solo; debe ser validado contra la persistencia.
+     *
+     * @return Un objeto ShortCode con el valor generado.
+     */
     @Override
     public ShortCode generate() {
         // Esta implementacion no es la ideal ya que es un Random y no asegura unicidad.

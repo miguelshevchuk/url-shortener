@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
+/**
+ * Entidad de persistencia que registra cada vez que se accede a una URL corta.
+ */
 @Entity
 @Data
 @AllArgsConstructor
@@ -18,11 +21,16 @@ public class UrlClickEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank
     private String shortCode;
+
     private Instant timestamp;
+
     private String userAgent;
+
     private String ipAddress;
+
     private String referer;
 
 }

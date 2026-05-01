@@ -9,6 +9,10 @@ import ar.com.urlshortener.infrastructure.rest.mapper.ShortUrlRestMapper;
 import ar.com.urlshortener.infrastructure.rest.model.CreateShortUrlRequest;
 import ar.com.urlshortener.infrastructure.rest.model.CreateShortUrlResponse;
 import ar.com.urlshortener.infrastructure.rest.model.GetAnalyticsResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -18,16 +22,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+/**
+ * Controlador REST para gestionar URLs cortas.
+ */
 @RestController
-@RequestMapping("/short-url")
+@RequestMapping
 @AllArgsConstructor
+@Tag(name = "Short URL", description = "API para creación, resolución y analíticas de URLs cortas")
 public class ShortUrlRestController {
 
     private CreateShortUrlUseCase createShortUrlUseCase;
     private ResolveShortUrlUseCase resolveShortUrlUseCase;
     private GetAnalyticsUseCase getAnalyticsUseCase;
 
-    @PostMapping
+    /**
+     * Crea una nueva URL corta.
+     *
+     * @param request Datos para la creación de la URL corta.
+     * @return La URL corta creada.
+     */
+    @Operation(summary = "Crear URL corta", description = "Genera un código corto para una URL original dada.")
+    @ApiResponse(responseCode = "200", description = "URL corta creada exitosamente")
+    @ApiResponse(responseCode = "400", description = "Solicitud inválida")
+    @ApiResponse(responseCode = "409", description = "El código corto ya existe")
+    @PostMapping("/url")
     public ResponseEntity<CreateShortUrlResponse> createShortUrlUseCase(
             @Valid @RequestBody CreateShortUrlRequest request) {
 
@@ -37,10 +55,21 @@ public class ShortUrlRestController {
         return ResponseEntity.ok(ShortUrlRestMapper.INSTANCE.toResponse(result));
     }
 
+    /**
+     * Redirige a la URL original asociada al código corto.
+     *
+     * @param request   Petición HTTP.
+     * @param shortCode Código corto de la URL.
+     * @return Redirección HTTP 302 a la URL original.
+     */
+    @Operation(summary = "Redirigir", description = "Redirige a la URL original y registra el click.")
+    @ApiResponse(responseCode = "302", description = "Redirección a la URL original")
+    @ApiResponse(responseCode = "404", description = "URL corta no encontrada")
+    @ApiResponse(responseCode = "410", description = "URL corta expirada")
     @GetMapping("/{shortCode}")
     public ResponseEntity<Void> redirect(
             HttpServletRequest request,
-            @PathVariable String shortCode
+            @Parameter(description = "Código corto de la URL") @PathVariable String shortCode
     ) {
        String originalUrl = resolveShortUrlUseCase.execute(
                new ResolveShortUrlQuery(
@@ -57,9 +86,18 @@ public class ShortUrlRestController {
                .build();
     }
 
-    @GetMapping("/{shortCode}/analytics")
+    /**
+     * Obtiene las analíticas de una URL corta.
+     *
+     * @param shortCode Código corto de la URL.
+     * @return Información detallada de analíticas.
+     */
+    @Operation(summary = "Obtener analíticas", description = "Obtiene estadísticas de uso para una URL corta específica.")
+    @ApiResponse(responseCode = "200", description = "Analíticas obtenidas exitosamente")
+    @ApiResponse(responseCode = "404", description = "URL corta no encontrada")
+    @GetMapping("/url/{shortCode}/analytics")
     public ResponseEntity<GetAnalyticsResponse> getAnalytics(
-            @PathVariable String shortCode
+            @Parameter(description = "Código corto de la URL") @PathVariable String shortCode
     ) {
 
         var result = getAnalyticsUseCase.execute(new GetAnalitycsQuery(shortCode));

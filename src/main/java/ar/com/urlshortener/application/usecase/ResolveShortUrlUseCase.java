@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.Objects;
 
+/**
+ * Caso de uso para resolver una URL corta y redirigir a la original.
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -26,6 +29,14 @@ public class ResolveShortUrlUseCase {
     private final ShortUrlRepository shortUrlRespository;
     private final UrlClickRepository urlClickRepository;
 
+    /**
+     * Resuelve un código corto, registra el click y devuelve la URL original.
+     *
+     * @param query Consulta con el código corto e información del cliente.
+     * @return La URL original.
+     * @throws ShortUrlNotFoundException si el código no existe.
+     * @throws ShortUrlExpiredException si la URL ha expirado.
+     */
     @Transactional
     public String execute(ResolveShortUrlQuery query) {
 

@@ -34,4 +34,4 @@ app:
       path: /h2-console
 server:
   servlet:
-    context-path: /api/v1/url-shortener
+    context-path: /api/v1

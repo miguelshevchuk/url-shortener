@@ -10,11 +10,23 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.Optional;
 
+/**
+ * Mapper de MapStruct para convertir entre el modelo de dominio ShortUrl y su entidad de persistencia.
+ */
 @Mapper
 public interface ShortUrlMapper {
 
+    /**
+     * Instancia única del mapper.
+     */
     ShortUrlMapper INSTANCE = Mappers.getMapper(ShortUrlMapper.class);
 
+    /**
+     * Convierte un modelo de dominio ShortUrl a su correspondiente entidad de base de datos.
+     *
+     * @param shortUrl Modelo de dominio.
+     * @return Entidad de persistencia.
+     */
     default ShortUrlEntity toEntity(ShortUrl shortUrl){
 
         return ShortUrlEntity.builder()
@@ -28,6 +40,12 @@ public interface ShortUrlMapper {
 
     }
 
+    /**
+     * Convierte una entidad de base de datos ShortUrlEntity al modelo de dominio ShortUrl.
+     *
+     * @param entity Entidad de persistencia.
+     * @return Modelo de dominio ShortUrl.
+     */
     default ShortUrl toModel(ShortUrlEntity entity) {
         if (entity == null) {
             return null;

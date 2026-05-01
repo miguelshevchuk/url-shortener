@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Objects;
 
+/**
+ * Caso de uso para la creación de URLs cortas.
+ */
 @Service
 @AllArgsConstructor
 public class CreateShortUrlUseCase {
@@ -22,6 +25,14 @@ public class CreateShortUrlUseCase {
     private final ShortCodeGenerator shortCodeGenerator;
     private final AppProperties properties;
 
+    /**
+     * Ejecuta la lógica para crear una URL corta.
+     * Si no se proporciona un código corto, se genera uno automáticamente.
+     *
+     * @param command Comando con la URL original y opcionalmente el código corto.
+     * @return Resultado con la información de la URL corta creada.
+     * @throws ShortUrlExistsException si el código corto ya está en uso.
+     */
     public CreateShortUrlResult execute(CreateShortUrlCommand command) {
 
         var shortCode = getShortCode(command);

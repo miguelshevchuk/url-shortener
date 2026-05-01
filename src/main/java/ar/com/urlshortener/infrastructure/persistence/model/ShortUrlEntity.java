@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 import java.util.List;
 
+/**
+ * Entidad de persistencia que representa una URL corta en la base de datos.
+ */
 @Entity
 @Table(name = "short_url")
 @Data
@@ -20,11 +23,16 @@ public class ShortUrlEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
     private String shortCode;
+
     private String originalUrl;
+
     private long clicks;
+
     private Instant createAt;
+
     private Instant expiresAt;
 
 

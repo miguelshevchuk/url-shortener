@@ -15,13 +15,25 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Filtro para limitar la tasa de solicitudes (Rate Limiting) por dirección IP.
+ * Utiliza Bucket4j para la gestión de tokens.
+ */
 @Component
 public class RateLimitFilter implements Filter {
 
     private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
 
-    //Esta solucion es solo para el ejercicio.
-    // Lo ideal es tener este tipo de soluciones a nivel Gateway, en una arquitectura basada en microservicios.
+    /**
+     * Procesa cada solicitud para verificar si el cliente ha excedido su límite de tasa.
+     * Si se excede el límite, responde con HTTP 429 (Too Many Requests).
+     *
+     * @param request  La solicitud recibida.
+     * @param response La respuesta a enviar.
+     * @param chain    Cadena de filtros.
+     * @throws IOException      En caso de errores de E/S.
+     * @throws ServletException En caso de errores generales del servlet.
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
