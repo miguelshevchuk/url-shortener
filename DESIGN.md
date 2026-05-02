@@ -17,7 +17,7 @@ Asegúrate de tener instalado Java 21 y Maven.
 
 1.  **Compilar el proyecto:**
     ```bash
-    mvn clean package
+    ./mvnw clean package
     ```
 2.  **Ejecutar la aplicación:**
     ```bash
