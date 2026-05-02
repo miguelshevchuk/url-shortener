@@ -52,7 +52,7 @@ public class ShortUrlRestController {
         var command = ShortUrlRestMapper.INSTANCE.toCommand(request);
         var result = createShortUrlUseCase.execute(command);
 
-        return ResponseEntity.ok(ShortUrlRestMapper.INSTANCE.toResponse(result));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ShortUrlRestMapper.INSTANCE.toResponse(result));
     }
 
     /**

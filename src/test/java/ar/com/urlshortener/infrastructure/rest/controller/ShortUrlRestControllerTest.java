@@ -50,15 +50,16 @@ class ShortUrlRestControllerTest {
     @Test
     void shouldCreateShortUrl() throws Exception {
         CreateShortUrlRequest request = new CreateShortUrlRequest("https://example.com", "custom");
-        CreateShortUrlResult result = new CreateShortUrlResult("custom", "https://example.com", Instant.now().plusSeconds(3600));
+        CreateShortUrlResult result = new CreateShortUrlResult("custom", "https://localhost:example/custom", "https://example.com", Instant.now().plusSeconds(3600));
 
         when(createShortUrlUseCase.execute(any(CreateShortUrlCommand.class))).thenReturn(result);
 
         mockMvc.perform(post("/url")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.shortCode").value("custom"))
+                .andExpect(jsonPath("$.shortUrl").value("https://localhost:example/custom"))
                 .andExpect(jsonPath("$.originalUrl").value("https://example.com"));
     }
 

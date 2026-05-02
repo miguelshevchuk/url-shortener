@@ -45,7 +45,7 @@ public class CreateShortUrlUseCase {
 
         ShortUrl savedShortUrl = shortUrlRespository.save(shortUrl);
 
-        return CreateShortUrlResult.from(savedShortUrl);
+        return CreateShortUrlResult.from(savedShortUrl, properties.getBaseUrl());
     }
 
     private ShortCode getShortCode(CreateShortUrlCommand command) {

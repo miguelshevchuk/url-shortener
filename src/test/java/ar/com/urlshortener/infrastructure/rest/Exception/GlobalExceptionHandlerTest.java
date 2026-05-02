@@ -30,10 +30,10 @@ class GlobalExceptionHandlerTest {
 
     @Test
     void handleUrlShortenerException() {
-        UrlShortenerException ex = new UrlShortenerException("Test error");
+        UrlShortenerException ex = new UrlShortenerException("Test error", HttpStatus.BAD_REQUEST);
         ResponseEntity<ProblemDetail> response = exceptionHandler.handleShortenerException(ex, request);
 
-        assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Test error", response.getBody().getDetail());
         assertEquals("/test-uri", response.getBody().getInstance().getPath());
     }

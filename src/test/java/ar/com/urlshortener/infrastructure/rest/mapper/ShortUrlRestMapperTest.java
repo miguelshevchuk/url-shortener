@@ -20,7 +20,7 @@ class ShortUrlRestMapperTest {
 
     @Test
     void shouldMapToCreateShortUrlResponse() {
-        CreateShortUrlResult result = new CreateShortUrlResult("abc", "https://example.com", Instant.now());
+        CreateShortUrlResult result = new CreateShortUrlResult("abc", "https://localhost:example/custom", "https://example.com", Instant.now());
         CreateShortUrlResponse response = mapper.toResponse(result);
 
         assertNotNull(response);

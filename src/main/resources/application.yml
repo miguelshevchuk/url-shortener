@@ -7,11 +7,11 @@ spring:
       spec: maximumSize=10000,expireAfterWrite=1h
 
   datasource:
-    url: {$DB.URL : jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1}
-    driverClassName: {$DB.DRIVER : org.h2.Driver}
-    username: {$DB.USER: sa}
+    url: ${DB.URL:jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1}
+    driverClassName: ${DB.DRIVER:org.h2.Driver}
+    username: ${DB.USER:sa}
     #En contextos reales, es una buena practica que algunos de estos datos lleguen cifrados, y se descifren en tiempo de despliegue
-    password: {$DB.PASS: ""}
+    password: ${DB.PASS:""}
   sql:
     init:
       mode: always
@@ -23,7 +23,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: {$JPA.DIALECT: org.hibernate.dialect.H2Dialect}
+        dialect: ${JPA.DIALECT:org.hibernate.dialect.H2Dialect}
   h2:
     console:
       enabled: true
@@ -34,5 +34,5 @@ server:
 
 app:
   config:
-    baseUrl: "url-short.com"
-    expirationSeconds: 3600
+    baseUrl: ${BASE_URL:http://localhost:8080/api/v1}
+    expirationSeconds: ${EXPIRATION_SECONDS:3600}

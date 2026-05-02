@@ -11,6 +11,8 @@ import java.time.Instant;
 public record CreateShortUrlResponse(
         @Schema(description = "Código corto generado o personalizado")
         String shortCode,
+        @Schema(description = "Nueva URL completa")
+        String shortUrl,
         @Schema(description = "URL original")
         String originalUrl,
         @Schema(description = "Fecha de expiración")

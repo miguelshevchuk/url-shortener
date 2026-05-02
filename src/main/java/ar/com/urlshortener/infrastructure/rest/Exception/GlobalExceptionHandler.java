@@ -134,12 +134,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UrlShortenerException.class)
     public ResponseEntity<ProblemDetail> handleShortenerException(UrlShortenerException ex,
                                                                HttpServletRequest request) {
-        ProblemDetail pd = buildProblemDetail(HttpStatus.NOT_ACCEPTABLE,
+        ProblemDetail pd = buildProblemDetail(ex.getStatus(),
                 "Error en la peticion: ",
                 ex.getMessage(),
                 request);
         log.error("Error en la peticion {}: {}", request.getRequestURI(), ex.getMessage(), ex);
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(pd);
+        return ResponseEntity.status(ex.getStatus()).body(pd);
     }
 
     @ExceptionHandler(Exception.class)

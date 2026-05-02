@@ -36,13 +36,11 @@ public class ShortUrlRepositoryImpl implements ShortUrlRepository {
 
     /**
      * Guarda o actualiza una URL corta.
-     * Evicta la entrada de caché correspondiente para asegurar consistencia.
      *
      * @param shortUrl Modelo de dominio a guardar.
      * @return El modelo guardado con su ID asignado.
      */
     @Override
-    @CacheEvict(value = "shortUrls", key = "#shortUrl.shortCode.value")
     public ShortUrl save(ShortUrl shortUrl) {
 
         var saved = this.shortUrlCRUDRepository
